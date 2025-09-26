@@ -1,0 +1,31 @@
+# data science and numerical computing
+numpy
+scipy
+scikit-learn
+ftfy
+tqdm
+pandas
+ipython
+
+# pytorch libraries
+torch
+torchvision
+transformers
+
+# computer vision and image processing
+opencv-python
+Pillow
+matplotlib
+detectron2 # For enhanced feature extraction
+
+# NLP and tokenization
+nltk
+spacy
+sentencepiece  # For tokenization
+
+# utilities
+pyyaml  # For configuration
+tensorboard  # For logging training metrics
+h5py  # For storing features
+boto3  # For downloading models
+requests  # For HTTP requests
