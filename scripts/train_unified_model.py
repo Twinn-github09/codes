@@ -32,38 +32,21 @@ def train_unified_model(args):
     print(f"Using device: {device}")
     print(f"Training {args.model_type} transformer model")
     
-    # Create datasets
-    train_dataset = VCGDataset(
-        split='train',
+    # Import filtered dataset
+    from dataloaders.filtered_dataset import create_filtered_dataloaders
+    
+    # Create filtered datasets that only include annotations with corresponding features
+    train_loader, val_loader = create_filtered_dataloaders(
         annotations_json=args.annotations_json,
+        val_annotations_json=args.val_annotations_json,
         features_dir=args.features_dir,
-        max_seq_len=args.max_seq_len
-    )
-    val_dataset = VCGDataset(
-        split='val',
-        annotations_json=args.annotations_json,
-        features_dir=args.features_dir,
-        max_seq_len=args.max_seq_len
+        batch_size=args.batch_size,
+        max_seq_len=args.max_seq_len,
+        num_workers=getattr(args, 'num_workers', 4)
     )
     
-    # Create data loaders
-    train_loader = VCGDataLoader(
-        dataset=train_dataset,
-        batch_size=args.batch_size,
-        shuffle=True,
-        num_workers=args.num_workers,
-        collate_fn=vcg_collate_fn
-    )
-    val_loader = VCGDataLoader(
-        dataset=val_dataset,
-        batch_size=args.batch_size,
-        shuffle=False,
-        num_workers=args.num_workers,
-        collate_fn=vcg_collate_fn
-    )
-    
-    # Create model
-    vocab_size = len(train_dataset.tokenizer)
+    # Create model (using standard vocab size for transformers)
+    vocab_size = 50257  # Standard GPT-2 vocabulary size
     transformer_type = TransformerType(args.model_type.lower())
     
     # Create configuration with custom parameters
